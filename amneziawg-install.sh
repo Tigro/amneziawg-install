@@ -283,12 +283,12 @@ function installAmneziaWG() {
 	elif [[ ${OS} == 'fedora' ]]; then
 		dnf config-manager --set-enabled crb
 		dnf install -y epel-release
-		dnf copr enable -y amneziavpn/amneziawg
-		dnf install -y amneziawg-dkms amneziawg-tools qrencode iptables
+		dnf copr enable -y tigro/amneziawg
+		dnf install -y amneziawg-kmod amneziawg-tools qrencode iptables
 	elif [[ ${OS} == 'centos' ]] || [[ ${OS} == 'almalinux' ]] || [[ ${OS} == 'rocky' ]]; then
 		dnf config-manager --set-enabled crb
 		dnf install -y epel-release
-		dnf copr enable -y amneziavpn/amneziawg
+		dnf copr enable -y tigro/amneziawg
 		dnf install -y amneziawg-dkms amneziawg-tools qrencode iptables
 	fi
 
@@ -574,11 +574,12 @@ function uninstallAmneziaWG() {
 			apt-key del 57290828
 			apt update
 		elif [[ ${OS} == 'fedora' ]]; then
-			dnf remove -y amneziawg-dkms amneziawg-tools
-			dnf copr disable -y amneziavpn/amneziawg
+			amnezia_rpms="(rpm -qa | grep kmod | grep amneziawg)"
+			dnf remove -y $amnezia_rpms
+			dnf copr disable -y tigro/amneziawg
 		elif [[ ${OS} == 'centos' ]] || [[ ${OS} == 'almalinux' ]] || [[ ${OS} == 'rocky' ]]; then
 			dnf remove -y amneziawg-dkms amneziawg-tools
-			dnf copr disable -y amneziavpn/amneziawg
+			dnf copr disable -y tigro/amneziawg
 		fi
 
 		# Check if AmneziaWG is running
